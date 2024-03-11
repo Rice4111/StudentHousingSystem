@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function toggleFields(selectObj) {
+            const userType = selectObj.value;
+            document.getElementById('userFields').style.display = 'block';
+            document.getElementById('landlordMessage').style.display = (userType == 'landlord') ? 'block' : 'none';
+        }
+
+    </script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</head>
+
+<body class="bg-light">
+    <div class="container vh-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <h3 class="text-center mb-4">Rental System</h3>
+                    <h5 class="mb-4">Register as:</h5>
+                    
+<!-- 
+                    <div id="personalUserFields" style="display:none;">
+                        <input type="text" class="form-control mb-3" placeholder="Firstname">
+                        <input type="text" class="form-control mb-3" placeholder="Lastnae">
+                        <input type="text" class="form-control mb-3" placeholder="Username">
+                        <input type="email" class="form-control mb-3" placeholder="Email Address">
+                        <input type="password" class="form-control mb-4" placeholder="Enter Password">
+                    </div>
+
+                    <div id="LandlordFields" style="display:none;">
+                        <input type="text" class="form-control mb-3" placeholder="Firstname">
+                        <input type="text" class="form-control mb-3" placeholder="Lastnae">
+                        <input type="text" class="form-control mb-3" placeholder="Username">
+                        <input type="email" class="form-control mb-3" placeholder="Email Address">
+                        <input type="password" class="form-control mb-4" placeholder="Enter Password">
+                        <p class="mb-3 text-muted">*Please submit your proof to a@sample.com<br>Your account will be reviewed before approval.</p>
+                    </div> -->
+
+                    <div id="userFields">
+                        <form method="POST" action="{{ url_for('sign_up') }}">
+                        <div class="mb-3">
+                        <select class="form-select" aria-label="User type" name="user_type" onchange="toggleFields(this)">
+                            <option disabled selected>Select registration type</option>
+                            <option value="user">Personal User</option>
+                            <option value="landlord">Landlord</option>
+                            <!-- <option value="personalLandlord">Personal Landlord</option>
+                            <option value="corporateLandlord">Corporate Landlord</option> -->
+                        </select>
+                        </div>   
+                        <input type="text" class="form-control mb-3" placeholder="Firstname" name="firstname">
+                        <input type="text" class="form-control mb-3" placeholder="Lastname" name="lastname">
+                        <input type="email" class="form-control mb-3" placeholder="Email Address" name="email">
+                        <input type="password" class="form-control mb-4" placeholder="Enter Password" name="password">
+                        <p id="landlordMessage" class="mb-3 text-muted" style="display:none;">*Please submit your proof to a@sample.com<br>Your account will be reviewed before approval.</p>
+                        <button type="submit" class="btn w-100 mb-3" style="background-color: #1a9fd3; color: white">Register</button>
+                        </form>
+                    </div>
+                    
+
+                    <!-- <div id="corporateLandlordFields" style="display:none;">
+                        <input type="text" class="form-control mb-3" placeholder="Company Name">
+                        <input type="text" class="form-control mb-3" placeholder="Business Registration Number">
+                        <input type="email" class="form-control mb-3" placeholder="Email Address">
+                        <p class="mb-3 text-muted">*Your account will be reviewed before approval.</p>
+                    </div> -->
+
+                    
+                    <p class="text-center mb-0"><small>Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none">Login now!</a></small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</html>

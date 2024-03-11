@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Database</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/10e7f97801.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        {% include 'navbar.html' %}
+
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <span class="fs-5 d-none d-sm-inline">Menu</span>
+                        </a>
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('user_dashboard') }}" class="nav-link align-middle px-0 dashmenu" >
+                                    <i class="fa-solid fa-house" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline" >Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle dashmenu">
+                                    <i class="fa-solid fa-clipboard" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline">Rental Requirements</span> </a>
+                                <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{{ url_for('preference') }}" class="nav-link px-0 dashmenusub"> <span class="d-none d-sm-inline">Input/Edit Requirements</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('result') }}" class="nav-link px-0 dashmenusub"> <span class="d-none d-sm-inline">View Matched Listings</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            
+                            <li class="nav-item">
+                                <a href="{{ url_for('contract') }}" class="nav-link align-middle px-0 dashmenu" >
+                                    <i class="fa-solid fa-file" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline" >View Contracts</span>
+                                </a>
+                            </li>
+                            <li>
+                            <li>
+                                <a href="#submenu4" data-bs-toggle="collapse" class="nav-link px-0 align-middle dashactive">
+                                    <i class="fa-solid fa-hand" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline">Requests</span> </a>
+                                    <ul class="collapse nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{{ url_for('requests') }}" class="nav-link px-0 dashmenusub"> <span class="d-none d-sm-inline">New Requests</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('database') }}" class="nav-link px-0"> <span class="d-none d-sm-inline">Requests History</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <hr>
+                        <!-- <div class="dropdown pb-4">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                                <span class="d-none d-sm-inline mx-1">loser</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+                
+
+                {% for request in requests %}
+                <!-- Modal -->
+                <div class="modal" id="modal{{ request.id }}">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Request #{{ request.id }}</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <h3>Request Content</h3>
+                                <p>{{ request.details }}</p>
+                                <!-- If you have a response field in your Request model, add it here -->
+                                <h3>Response</h3>
+                                <p>{{ request.response or 'No response yet.' }}</p>
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+                <div class="col py-3">
+                    <div class="container mt-5">
+                        <h1 class="mb-4">Requests List</h1>
+                
+                        <!-- Table for listing all properties -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Statue</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Sample rows (In the real application, these rows will be populated from the database) -->
+                                {% for request in requests %}
+                                <tr>
+                                    <th scope="row">{{ request.id }}</th>
+                                    <td>{{ request.request_type }}</td>
+                                    <td>{{ request.submitted_on.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    <td>
+                                        {% if request.response %}
+                                            Done
+                                        {% else %}
+                                            Pending
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ request.id }}">View</a>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <!-- ... Additional rows ... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

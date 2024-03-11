@@ -1,0 +1,13 @@
+body {
+    padding-top: 70px;
+}
+.dashmenu {
+    color: white;
+    font-weight: bold;
+}
+.dashmenusub{
+    color: white;
+}
+.dashactive{
+    font-weight: bold;
+}

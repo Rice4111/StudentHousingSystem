@@ -1,0 +1,75 @@
+<!-- navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Rental System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('index') %} active {% endif %}" aria-current="page" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('rent') %} active {% endif %}" href="{{ url_for('rent') }}">Rent</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint != 'index' and request.endpoint != 'rent' and request.endpoint != 'contact' %} active {% endif %}" 
+                        href="
+                        {% if current_user.user_type == 'admin' %}
+                            {{ url_for('admin_dashboard') }}
+                        {% elif current_user.user_type == 'landlord' %}
+                            {{ url_for('landlord_dashboard') }}
+                        {% else %}
+                            {{ url_for('user_dashboard') }}
+                        {% endif %}">Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('contact') %} active {% endif %}" href="{{ url_for('contact') }}">Contact</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    <!-- {% if session.get('logged_in') %}
+                    <div class="dropdown d-flex justify-content-end">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ url_for('static', filename=session.get('image_file', 'default.jpg')) }}" alt="user_image" width="30" height="30" class="rounded-circle">
+                            <span class="d-none d-sm-inline mx-1" style="color: black;">{{ session.get('firstname') }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Log in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn text-white" style="background-color: #1a9fd3;" href="{{ url_for('sign_up') }}">Sign up</a>
+                    </li>
+                    {% endif %} -->
+                    {% if current_user.is_authenticated %}
+                    <div class="dropdown d-flex justify-content-end">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ url_for('static', filename=current_user.image_file) }}" alt="user_image" width="30" height="30" class="rounded-circle">
+                            <span class="d-none d-sm-inline mx-1" style="color: black;">{{ current_user.firstname }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn text-white" style="background-color: #1a9fd3;" href="{{ url_for('sign_up') }}">Sign up</a>
+                        </li>
+                    {% endif %}                       
+                </ul>
+
+            </div>
+        </div>
+</nav>

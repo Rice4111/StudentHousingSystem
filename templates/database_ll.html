@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Database</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/10e7f97801.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        {% include 'navbar.html' %}
+
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <span class="fs-5 d-none d-sm-inline">Menu</span>
+                        </a>
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('landlord_dashboard') }}" class="nav-link align-middle px-0 dashmenu">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                                </a>
+                            </li>
+                            <!-- <li>
+                                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Property Management</span> </a>
+                                <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="database.html" class="nav-link px-0"> <span class="d-none d-sm-inline">Publish New Property</span> </a>
+                                    </li>
+                                    <li>
+                                        <a href="database.html" class="nav-link px-0"> <span class="d-none d-sm-inline">Edit Existing Property Details</span></a>
+                                    </li>
+                                </ul>
+                            </li> -->
+                            <li class="w-100">
+                                <a href="{{ url_for('preference_ll') }}" class="nav-link px-0 dashmenu"> <span class="d-none d-sm-inline">Input/Edit Requirements</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('database_ll') }}" class="nav-link px-0 align-middle dashactive">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Property Management</span> </a>
+                            </li>
+                            
+                            <li>
+                                <a href="{{ url_for('request_ll') }}" class="nav-link px-0 align-middle dashmenu">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Requests</span> </a>
+                            </li>
+                        </ul>
+                        <hr>
+                        <!-- <div class="dropdown pb-4">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                                <span class="d-none d-sm-inline mx-1">loser</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+            
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Modal Heading</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+        
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <h3>Edit Property Information</h3>
+                                <form id="editPropertyForm">
+                                    <div class="mb-3">
+                                        <label for="propertyName">Property Name:</label>
+                                        <input type="text" class="form-control" id="propertyName" name="propertyName" placeholder="Edit property name" required>
+                                    </div>
+                            
+                                    <div class="mb-3">
+                                        <label for="propertyAddress">Property Address:</label>
+                                        <input type="text" class="form-control" id="propertyAddress" name="propertyAddress" placeholder="Edit property address" required>
+                                    </div>
+                            
+                                    <div class="mb-3">
+                                        <label for="propertyPrice">Property Price:</label>
+                                        <input type="text" class="form-control" id="propertyPrice" name="propertyPrice" placeholder="Edit property price" required>
+                                    </div>
+                            
+                                    <button type="button" class="btn btn-primary" id="submitPropertyEdit">Submit</button>
+                                </form>
+                            </div>
+                            
+        
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+
+
+                {% for property in properties %}
+                <!-- View Modal -->
+                <div class="modal" id="modal{{ property.id }}">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Property #{{ property.id }}</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <h3>Property details</h3>
+                                <p>{{ property.detail }}</p>
+
+                                <h3>Image</h3>
+                                <img src="{{ url_for('static', filename=property.image_url.replace('\\', '/')) }}" alt="Property Image" style="max-width: 100%; height: auto;">
+
+                            
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Add Property Modal -->
+                <div class="modal fade" id="addPropertyModal" tabindex="-1" aria-labelledby="addPropertyModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addPropertyModalLabel">Add New Property</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addPropertyForm" action="{{ url_for('add_property') }}" method="post" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="propertyName" class="form-label">Name:</label>
+                                        <input type="text" class="form-control" id="propertyName" name="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="propertyPrice" class="form-label">Price:</label>
+                                        <input type="number" step="0.01" class="form-control" id="propertyPrice" name="price" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="roomCount" class="form-label">Room Count:</label>
+                                        <select class="form-select" id="roomCount" name="room_count" required>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="propertyImage" class="form-label">Image:</label>
+                                        <input type="file" class="form-control" id="propertyImage" name="image">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="propertyDetail" class="form-label">Detail:</label>
+                                        <textarea class="form-control" id="propertyDetail" name="detail" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% for property in properties %}
+                    <!-- Edit Property Modal -->
+                    <div class="modal fade" id="modalEdit{{ property.id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ property.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalEditLabel{{ property.id }}">Edit Property #{{ property.id }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <form action="{{ url_for('update_property', property_id=property.id) }}" method="post" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label for="name{{ property.id }}" class="form-label">Name:</label>
+                                            <input type="text" class="form-control" id="name{{ property.id }}" name="name" value="{{ property.name }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="price{{ property.id }}" class="form-label">Price:</label>
+                                            <input type="number" step="0.01" class="form-control" id="price{{ property.id }}" name="price" value="{{ property.price }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="roomCount{{ property.id }}" class="form-label">Room Count:</label>
+                                            <select class="form-select" id="roomCount{{ property.id }}" name="room_count" required>
+                                                <option value="1" {% if property.room_count == 1 %}selected{% endif %}>1</option>
+                                                <option value="2" {% if property.room_count == 2 %}selected{% endif %}>2</option>
+                                                <option value="3" {% if property.room_count == 3 %}selected{% endif %}>3</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="availability{{ property.id }}" class="form-label">Availability:</label>
+                                            <select class="form-select" id="availability{{ property.id }}" name="availability" required>
+                                                <option value="true" {% if property.availability %}selected{% endif %}>Available</option>
+                                                <option value="false" {% if not property.availability %}selected{% endif %}>Not Available</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="detail{{ property.id }}" class="form-label">Detail:</label>
+                                            <textarea class="form-control" id="detail{{ property.id }}" name="detail" rows="3">{{ property.detail }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </form>
+                                </div>
+                                <!-- Modal Footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+                <div class="col py-3">
+                    <div class="container mt-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h1 class="mb-0">Property List</h1>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPropertyModal">Add</button>
+                        </div>
+                
+                        <!-- Table for listing all properties -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Room</th>
+                                    <th scope="col">Availability</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Sample rows (In the real application, these rows will be populated from the database) -->
+
+                                {% for property in properties %}
+                                    <tr>
+                                        <th scope="row">{{ property.id }}</th>
+                                        <td>{{ property.name }}</td>
+                                        <td>{{ property.price }}</td>
+                                        <td>{{ property.room_count }}</td>
+                                        <td>{{ 'Yes' if property.availability else 'No' }}</td>
+
+                                        <td>
+                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ property.id }}">View</a>
+                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ property.id }}">Edit</a>
+                                            <a href="{{ url_for('delete_property', property_id=property.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Preference</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/10e7f97801.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        {% include 'navbar.html' %}
+
+
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <span class="fs-5 d-none d-sm-inline">Menu</span>
+                        </a>
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('user_dashboard') }}" class="nav-link align-middle px-0 dashmenu" >
+                                    <i class="fa-solid fa-house" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline" >Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle dashmenu">
+                                    <i class="fa-solid fa-clipboard" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline">Rental Requirements</span> </a>
+                                <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{{ url_for('preference') }}" class="nav-link px-0"> <span class="d-none d-sm-inline">Input/Edit Requirements</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('result') }}" class="nav-link px-0 dashmenusub"> <span class="d-none d-sm-inline">View Matched Listings</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            
+                            <li class="nav-item">
+                                <a href="{{ url_for('contract') }}" class="nav-link align-middle px-0 dashmenu" >
+                                    <i class="fa-solid fa-file" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline" >View Contracts</span>
+                                </a>
+                            </li>
+                            <li>
+                            <li>
+                                <a href="#submenu4" data-bs-toggle="collapse" class="nav-link px-0 align-middle dashmenu">
+                                    <i class="fa-solid fa-hand" style="color: #ffffff;"></i> <span class="ms-1 d-none d-sm-inline">Requests</span> </a>
+                                    <ul class="collapse nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{{ url_for('requests') }}" class="nav-link px-0 dashmenusub"> <span class="d-none d-sm-inline">New Requests</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('request_list') }}" class="nav-link px-0 dashmenusub"> <span class="d-none d-sm-inline">Requests History</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <hr>
+                        <!-- <div class="dropdown pb-4">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                                <span class="d-none d-sm-inline mx-1">loser</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+
+                
+                <div class="col py-3">
+                    <div class="container mt-5">
+                        <h2 class="text-center">Vandals Preferences</h2>
+                        <p class="text-center text-muted">
+                            Note: Submitting this form will update your existing preferences, if any.
+                        </p>
+
+                    
+                        <form action="preference" method="post" class="mt-4">
+                    
+
+                            <div class="form-group mt-3">  
+                            
+                                <div class="mt-2">
+                                    <label for="RentalType">Rental Type:</label>
+                                    <select class="form-control" id="RentalType" name="RentalType">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Sole Rental" {% if existing_preference and existing_preference.rental_type == 'Sole Rental' %} selected {% endif %}>Sole Rental</option>
+                                        <option value="Shared Rental" {% if existing_preference and existing_preference.rental_type == 'Shared Rental' %} selected {% endif %}>Shared Rental</option>
+                                    </select>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label for="petsPolicy">Pets Policy:</label>
+                                    <select class="form-control" id="petsPolicy" name="petsPolicy">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="allowed" {% if existing_preference and existing_preference.pets_policy == 'allowed' %} selected {% endif %}>Allowed</option>
+                                        <option value="not_allowed" {% if existing_preference and existing_preference.pets_policy == 'not_allowed' %} selected {% endif %}>Non-Allowed</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="mt-2">
+                                    <label for="smokingPolicy">Smoking Policy:</label>
+                                    <select class="form-control" id="smokingPolicy" name="smokingPolicy">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="smoking_allowed" {% if existing_preference and existing_preference.smoking_policy == 'smoking_allowed' %} selected {% endif %}>Allowed</option>
+                                        <option value="non_smoking" {% if existing_preference and existing_preference.smoking_policy == 'non_smoking' %} selected {% endif %}>Non-Allowed</option>
+                                    </select>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label for="smokingPolicy">Gender Policy:</label>
+                                    <select class="form-control" id="GenderPolicy" name="GenderPolicy">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="male" {% if existing_preference and existing_preference.gender_policy == 'male' %} selected {% endif %}>Male</option>
+                                        <option value="female" {% if existing_preference and existing_preference.gender_policy == 'female' %} selected {% endif %}>Female</option>
+                                    </select>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label for="smokingPolicy">Sleep Policy:</label>
+                                    <select class="form-control" id="SleepPolicy" name="SleepPolicy">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="early" {% if existing_preference and existing_preference.sleep_policy == 'early' %} selected {% endif %}>Early</option>
+                                        <option value="late" {% if existing_preference and existing_preference.sleep_policy == 'late' %} selected {% endif %}>Late</option>
+                                    </select>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label for="TermPolicy">Term Policy:</label>
+                                    <select class="form-control" id="TermPolicy" name="TermPolicy">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="six_months" {% if existing_preference and existing_preference.term_policy == 'six_months' %} selected {% endif %}>Six Months</option>
+                                        <option value="twelve_months"{% if existing_preference and existing_preference.term_policy == 'twelve_months' %} selected {% endif %}>Twelve Months</option>
+                                    </select>
+                                </div>
+                    
+                            <!-- Contract Terms -->
+                            <div class="form-group mt-3">
+                                <label for="notice">Additional Requirements</label>
+                                <input type="text" class="form-control" id="notice" name="notice" value="{{ existing_preference.additional_requirements if existing_preference else '' }}" placeholder="Tell us something about you">
+                            </div>
+                    
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary">Submit Requirements</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    
+        
+    </html>
